@@ -1,0 +1,142 @@
+Run80001:
+200 775 200 775 200
+Laser Scale 10000 (5KHz)
+30K events
+
+Run80002:
+200 775 200 775 300
+Laser Scale 10000 (5KHz)
+20K events - 15 min
+
+Run80003:
+200 775 200 775 100
+Laser Scale 10000 (5KHz)
+20K events - 16 min
+
+Run80004:
+200 775 200 775 50
+Laser Scale 10000 (5KHz)
+20K events - 16 min
+
+
+###############################################
+Tile 27
+Position: When looking at backplane, cards inserted second from top and second from left
+          Pad is H1 (Chess notation) which corresponds to Digi 1, CH 26
+	  Z = 135, X = , Y =
+Laser Scale Factor = 50000 (991 Hz)
+Scope: CH1: (Fast Photodiode)
+            100 mV/div, 50 ohm, 10 GHz
+	    Trigger = -8 mV
+       CH5: (HRPPD Signal)
+            10 mV/div, 50 ohm, 10 GHz
+       Horizontal: 4 ns/div, 50 GS/s, 2 Kpts, 40 ns full range, 20 ps/pt, 10% trig position
+
+run80005: Voltage = 200 600 200 600 25 : 20K events
+run80006: Voltage = 200 600 200 600 50 : 20K events
+run80007: Voltage = 200 600 200 600 75 : 20K events
+run80008: Voltage = 200 600 200 600 100 : 20K events
+run80009: Voltage = 200 600 200 600 200 : 20K events
+run80010: Voltage = 200 600 200 600 300 : 20K events
+run80011: Voltage = 200 600 200 600 400 : 20K events
+
+Next five runs are different pads at recommended opperating point. (6/25/25)
+
+Position: When looking at backplane, cards inserted fourth from top and fourth from left.
+Laser and Scope settings same as above. (20K Events All)
+
+run80012: Voltage = 200 600 200 600 200
+          Position: Z = 135, X = 133.46, Y = 118.74:  e4, Digi 0, CH 05
+run80013: Voltage = 200 600 200 600 200
+          Position: Z = 135, X = 123.71, Y = 112.24:  b6, Digi 0, CH 16
+run80014: Voltage = 200 600 200 600 200
+          Position: Z = 135, X = 136.71, Y = 112.24:  f6, Digi 1, CH 02
+run80015: Voltage = 200 600 200 600 200
+          Position: Z = 135, X = 130.21, Y = 125.24:  d2, Digi 0, CH 11
+run80016: Voltage = 200 600 200 600 200
+          Position: Z = 135, X = 139.96, Y = 121.99:  g3, Digi 1, CH 30
+
+Next two runs have different MCP bias
+
+run80017: Voltage = 200 625 200 575 200
+          Position: Z = 135, X = 139.96, Y = 121.99:  g3, Digi 1, CH 30
+run80018: Voltage = 200 650 200 550 200
+          Position: Z = 135, X = 139.96, Y = 121.99:  g3, Digi 1, CH 30
+
+
+###############################################
+Tile 16
+Position: When looking at backplane, cards inserted top row and right-most column
+          Pad is d4 (Chess notation) which corresponds to Digi 1, CH 29
+	  Z = 135, X = 130.21, Y = 40.74
+Laser Scale Factor = 50000 (991 Hz)
+Scope: CH1: (Fast Photodiode)
+            100 mV/div, 50 ohm, 10 GHz
+	    Trigger = -8 mV
+       CH5: (HRPPD Signal)
+            10 mV/div, 50 ohm, 10 GHz
+       Horizontal: 4 ns/div, 50 GS/s, 2 Kpts, 40 ns full range, 20 ps/pt, 10% trig position
+
+6/26/25
+
+run80019: Voltage = 200 625 200 625 100
+run80020: Voltage = 200 625 200 625 300
+run80021: Voltage = 200 625 200 625 400
+run80022: Voltage = 200 650 200 650 30
+run80023: Voltage = 200 650 200 650 100
+run80024: Voltage = 200 650 200 650 300
+run80025: Voltage = 200 650 200 650 400
+run80026: Voltage = 200 675 200 675 30
+run80027: Voltage = 200 675 200 675 100
+run80028: Voltage = 200 675 200 675 300
+
+6/28/25
+
+Position: When looking at backplane, cards inserted third row from top and left-most column
+
+run80029: Voltage = 200 650 200 650 400 : 20K events
+          Position: Z = 135, X = 65.21, Y = 86.24:  h6, Digi 0, CH 00
+
+Next 4 runs - Change Scope CH 5 from 10 to 20 mV/div
+
+run80030: Voltage = 200 650 200 650 400: 20K evnets
+          Position: Z = 135, X = 65.21, Y = 86.24: h6, Digi 0, CH 00
+run80031: Same as 30: 20K events
+run80032: Same as 30: 20K events
+run80033: Same as 30: 20K events
+
+Change Scope CH5 back to 10 mV/div
+
+run80034: Voltage = 200 675 200 675 300 : 20K events
+          Position: Z = 135, X = 65.21, Y = 86.24: h6, Digi 0, CH 00
+
+Next 4 runs - Chage Scope CH 5 from 10 to 20 mV/div
+
+run80035: Voltage = 200 675 200 675 300 : 20K events
+          Position: Z = 135, X = 65.21, Y = 86.24: h6, Digi 0, CH 00
+run80036: Same as 35: 20K events
+run80037: Same as 35: 20K events
+run80038: Same as 35: 20K events
+
+Change Scope CH 5 back to 10 mV/div
+
+run80039: Voltage = 200 650 200 650 400 : 20K events
+          Position: Z = 135, X = 45.71, Y = 92.74: b4, Digi 1, CH 01
+run80040: Voltage = 200 650 200 650 400 : 20K events
+          Position: Z = 135, X = 55.46, Y = 89.49: e5, Digi 0, CH 29
+run80041: Voltage = 200 650 200 650 400 : 20K events
+          Position: Z = 135, X = 48.96, Y = 82.99: c7, Digi 1, CH 25
+run80042: Voltage = 200 675 200 625 400 : 20K events
+          Position: Z = 135, X = 48.96, Y = 82.99: c7, Digi 1, CH 25
+run80043: Voltage = 200 700 200 600 400 : 20K events
+          Position: Z = 135, X = 48.96, Y = 82.99: c7, Digi 1, CH 25
+
+
+Run80023: sigma = 23.3 ps
+Run80024: sigma = 16.3 ps
+
+###############################################
+Tile 23
+run80044: Voltage = 200 600 200 600 400 : 20K events
+          Position: Z = 135, X = 45.71, Y = 50.49: b1, Digi 1, CH 01
+ 
