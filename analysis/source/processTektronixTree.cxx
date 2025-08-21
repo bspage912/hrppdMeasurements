@@ -22,17 +22,37 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
+  // Add File to Chain
   TChain *mychain = new TChain("tree");
   mychain->Add(argv[1]);
 
+  // Open Output File
   TFile *ofile = TFile::Open(argv[2],"recreate");
 
-  //auto tout = new TTree("t", "HRPPD Tree");
+  // Create Output Tree to Allow Offline Analysis
+  auto tout = new TTree("t", "Analyzed Scope Tree");
 
   //auto *hb1 = new TH1D("hb1", "", 100, -0.020, 0.020);
   //auto *hb4 = new TH1D("hb4", "", 100, -0.010, 0.010);
-  
+
+  // Set Up Input Tree Reader
   TTreeReader tree_reader(mychain);
+
+  unsigned fpdOk = 0, hrppdOk = 0, fpdPeakIndex = 0, hrppdPeakIndex = 0, fpdPoints = 0, hrppdPoints = 0;
+  double fpdBase = 0.0, hrppdBase = 0.0, fpdAmp = 0.0, hrppdAmp = 0.0, fpd50Time = 0.0, hrppd50Time = 0.0;
+  tout->Branch("fpdOk", &fpdOk, "fpdOk/I");
+  tout->Branch("fpdPeakIndex", &fpdPeakIndex, "fpdPeakIndex/I");
+  tout->Branch("fpdPoints", &fpdPoints, "fpdPoints/I");
+  tout->Branch("fpdBase", &fpdBase, "fpdBase/D");
+  tout->Branch("fpdAmp", &fpdAmp, "fpdAmp/D");
+  tout->Branch("fpd50Time", &fpd50Time, "fpd50Time/D");
+  tout->Branch("hrppdOk",&hrppdOk, "hrppdOk/I");
+  tout->Branch("hrppdPeakIndex", &hrppdPeakIndex, "hrppdPeakIndex/I");
+  tout->Branch("hrppdPoints", &hrppdPoints, "hrppdPoints/I");
+  tout->Branch("hrppdBase", &hrppdBase, "hrppdBase/D");
+  tout->Branch("hrppdAmp", &hrppdAmp, "hrppdAmp/D");
+  tout->Branch("hrppd50Time", &hrppd50Time, "hrppd50Time/D");
+  
 
   //TTreeReaderArray<double> eventTime    = {tree_reader, "eventTime"};
   TTreeReaderArray<double> signalTime   = {tree_reader, "TIME"};
@@ -48,7 +68,7 @@ int main(int argc, char* argv[]) {
   TH1D *hFPDBaseline = new TH1D("hFPDBaseline","",2000,-0.1,0.1);
   TH1D *hFPDAmplitude = new TH1D("hFPDAmplitude","",200,0.,1.);
 
-  TH1D *hFPDPointsInFit = new TH1D("hFPDPointsInFit","",20,0.,20.);
+  TH1D *hFPDPointsInFit = new TH1D("hFPDPointsInFit","",100,0.,100.);
   TH2D *hFPDEdgeEndVsBeginIndex = new TH2D("hFPDEdgeEndVsBeginIndex","",2000,0.,2000.,2000,0.,2000.);
 
   // HRPPD
@@ -58,7 +78,7 @@ int main(int argc, char* argv[]) {
   TH1D *hHRPPDAmplitude = new TH1D("hHRPPDAmplitude","",1000,0.,0.5);
   TH2D *hHRPPDAmplitudeVsBottomIndex = new TH2D("hHRPPDAmplitudeVsBottomIndex","",5000,0.,5000.,200,-1.,1.);
 
-  TH1D *hHRPPDPointsInFit = new TH1D("hHRPPDPointsInFit","",20,0.,20.);
+  TH1D *hHRPPDPointsInFit = new TH1D("hHRPPDPointsInFit","",100,0.,100.);
   TH2D *hHRPPDEdgeEndVsBeginIndex = new TH2D("hHRPPDEdgeEndVsBeginIndex","",2000,0.,2000.,2000,0.,2000.);
 
   // Timing
@@ -113,6 +133,8 @@ int main(int argc, char* argv[]) {
     int fpdBottomIndex = -1;
     int fpdTriggerIndex = -1;
     //bool fpdTriggerFlag = true;
+
+    fpdOk = 0;
 
     // Get Threshold Crossing
     fpdTriggerIndex = fpd.getThresholdIndex(_FPD_THRESHOLD_);
@@ -174,6 +196,14 @@ int main(int argc, char* argv[]) {
 	  }	
       }
 
+    // Set FPD Tree Variables
+    if(fpdTriggerIndex > -1) fpdOk = 1;
+    fpdPeakIndex = fpdBottomIndex;
+    fpdPoints = pointsInFPDFit;
+    fpdBase = fpdBaseline;
+    fpdAmp = fpdAmplitude;
+    fpd50Time = fpd50Percent;
+
 
     //==================================================
     //             Signal (HRPPD) Pulse
@@ -183,6 +213,8 @@ int main(int argc, char* argv[]) {
     double hrppdBaseline = 0.;
     double hrppdAmplitude = 0.;
     int hrppdBottomIndex = -1;
+
+    hrppdOk = 0;
 
     if(fpdTriggerIndex > -1) // Only look for HRPPD pulse if there was a trigger
       {
@@ -243,6 +275,14 @@ int main(int argc, char* argv[]) {
 	  }	
       }
 
+    // Set HRPPD Tree Variables
+    if(hrppdBottomIndex > -1) hrppdOk = 1;
+    hrppdPeakIndex = hrppdBottomIndex;
+    hrppdPoints = pointsInHRPPDFit;
+    hrppdBase = hrppdBaseline;
+    hrppdAmp = hrppdAmplitude;
+    hrppd50Time = hrppd50Percent;
+
 
     //==================================================
     //                HRPPD - FPD Timing
@@ -254,9 +294,11 @@ int main(int argc, char* argv[]) {
 	hHRPPDFPDTimeDiffVsAmp->Fill(hrppdAmplitude,hrppdFPDTimeDiff);
       }
 
+    tout->Fill();
     NEVENTS++;
   }
 
+  tout->Write();
   ofile->Write();
   ofile->Close();
 
