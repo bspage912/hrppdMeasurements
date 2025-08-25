@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
   TTreeReader tree_reader(mychain);
 
   unsigned fpdOk = 0, hrppdOk = 0, fpdPeakIndex = 0, hrppdPeakIndex = 0, fpdPoints = 0, hrppdPoints = 0;
-  double fpdBase = 0.0, hrppdBase = 0.0, fpdAmp = 0.0, hrppdAmp = 0.0, fpd50Time = 0.0, hrppd50Time = 0.0;
+  double fpdBase = 0.0, hrppdBase = 0.0, fpdAmp = 0.0, hrppdAmp = 0.0, fpd50Time = 0.0, hrppd10Time = 0.0, hrppd50Time = 0.0, hrppd90Time = 0.0;
   tout->Branch("fpdOk", &fpdOk, "fpdOk/I");
   tout->Branch("fpdPeakIndex", &fpdPeakIndex, "fpdPeakIndex/I");
   tout->Branch("fpdPoints", &fpdPoints, "fpdPoints/I");
@@ -51,7 +51,9 @@ int main(int argc, char* argv[]) {
   tout->Branch("hrppdPoints", &hrppdPoints, "hrppdPoints/I");
   tout->Branch("hrppdBase", &hrppdBase, "hrppdBase/D");
   tout->Branch("hrppdAmp", &hrppdAmp, "hrppdAmp/D");
+  tout->Branch("hrppd10Time", &hrppd10Time, "hrppd10Time/D");
   tout->Branch("hrppd50Time", &hrppd50Time, "hrppd50Time/D");
+  tout->Branch("hrppd90Time", &hrppd90Time, "hrppd90Time/D");
   
 
   //TTreeReaderArray<double> eventTime    = {tree_reader, "eventTime"};
@@ -247,7 +249,9 @@ int main(int argc, char* argv[]) {
     int hrppdEdgeBeginIndex = -1;
     int hrppdEdgeEndIndex = -1;
     int pointsInHRPPDFit = 0;
-    double hrppd50Percent = 0.0; 
+    double hrppd10Percent = 0.0;
+    double hrppd50Percent = 0.0;
+    double hrppd90Percent = 0.0;
     //double aFPD = 0.;
     //double bFPD = 0.;
 
@@ -271,7 +275,9 @@ int main(int argc, char* argv[]) {
 	if(hrppdEdgeBeginIndex > -1 && hrppdEdgeEndIndex > -1) // Make sure ranges are defined
 	  {
 	    double workingpoint = 0.5; // Get time at this percentage of the amplitude
+	    hrppd10Percent = hrppd.fitLeadingEdge(hrppdEdgeBeginIndex,hrppdEdgeEndIndex,hrppdAmplitude,hrppdBaseline,0.10);
 	    hrppd50Percent = hrppd.fitLeadingEdge(hrppdEdgeBeginIndex,hrppdEdgeEndIndex,hrppdAmplitude,hrppdBaseline,workingpoint);
+	    hrppd90Percent = hrppd.fitLeadingEdge(hrppdEdgeBeginIndex,hrppdEdgeEndIndex,hrppdAmplitude,hrppdBaseline,0.90);
 	  }	
       }
 
@@ -281,8 +287,10 @@ int main(int argc, char* argv[]) {
     hrppdPoints = pointsInHRPPDFit;
     hrppdBase = hrppdBaseline;
     hrppdAmp = hrppdAmplitude;
+    hrppd10Time = hrppd10Percent;
     hrppd50Time = hrppd50Percent;
-
+    hrppd90Time = hrppd90Percent;
+    
 
     //==================================================
     //                HRPPD - FPD Timing
