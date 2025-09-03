@@ -21,6 +21,7 @@ class waveform {
   int getThresholdIndex(double threshold);
   double getBaseline(unsigned from, unsigned to);
   int getLeadingEdgeIndex(unsigned start, double threshold, unsigned limit);
+  int getTrailingEdgeIndex(unsigned start, double threshold, unsigned limit);
   double fitLeadingEdge(unsigned from, unsigned to, double amp, double base, double wkpt);
 
  private:

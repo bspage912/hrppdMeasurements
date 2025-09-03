@@ -1,8 +1,8 @@
 // Plot and fit timing curve - place a cut on HRPPD amplitude
 
-int timingCurve(TString rootHistFname, double aCut = 0.0)
+int timingCurve(TString rootHistFname, int number, double aCut = 0.0)
 {
-  gStyle->SetOptStat();
+  gStyle->SetOptStat(0);
 
   TFile *fa = new TFile(rootHistFname);
   assert(fa->IsOpen());
@@ -10,7 +10,7 @@ int timingCurve(TString rootHistFname, double aCut = 0.0)
   TTree *t = (TTree *)fa->Get("t");
 
   int fpdOk = 0, hrppdOk = 0, fpdPeakIndex = 0, hrppdPeakIndex = 0, fpdPoints = 0, hrppdPoints = 0;
-  double fpdBase = 0.0, hrppdBase = 0.0, fpdAmp = 0.0, hrppdAmp = 0.0, fpd50Time = 0.0, hrppd50Time = 0.0;
+  double fpdBase = 0.0, hrppdBase = 0.0, fpdAmp = 0.0, hrppdAmp = 0.0, fpd50Time = 0.0, hrppd10Time = 0.0, hrppd50Time = 0.0, hrppd90Time = 0.0;
   t->SetBranchAddress("fpdOk", &fpdOk);
   t->SetBranchAddress("fpdPeakIndex", &fpdPeakIndex);
   t->SetBranchAddress("fpdPoints", &fpdPoints);
@@ -22,16 +22,19 @@ int timingCurve(TString rootHistFname, double aCut = 0.0)
   t->SetBranchAddress("hrppdPoints", &hrppdPoints);
   t->SetBranchAddress("hrppdBase", &hrppdBase);
   t->SetBranchAddress("hrppdAmp", &hrppdAmp);
+  t->SetBranchAddress("hrppd10Time", &hrppd10Time);
   t->SetBranchAddress("hrppd50Time", &hrppd50Time);
+  t->SetBranchAddress("hrppd90Time", &hrppd90Time);
 
-  TH1D *hAmplitude = new TH1D("hAmplitude","",500,0.,0.5);
-  TH1D *hNumPoints = new TH1D("hNumPoints","",50,0.,50.);
-  TH1D *hNumPointsCut = new TH1D("hNumPointsCut","",50,0.,50.);
-  TH1D *hTimingCurve = new TH1D("hTimingCurve","",30000,15000.,45000.);
-  TH1D *hTimingCurveCut = new TH1D("hTimingCurveCut","",30000,15000.,45000.);
-  TH2D *hTimingCurveVsAmplitude = new TH2D("hTimingCurveVsAmplitude","",500,0.,0.5,10000,20000.,30000.);
-  TH2D *hTimingCurveVsNumPoints = new TH2D("hTimingCurveVsNumPoints","",50,0.,50.,10000,20000.,30000.);
-  TH2D *hTimingCurveVsNumPointsCut = new TH2D("hTimingCurveVsNumPointsCut","",50,0.,50.,10000,20000.,30000.);
+  TH1D *hAmplitude = new TH1D("hAmplitude",";Amplitude [V]",500,0.,0.5);
+  TH1D *hNumPoints = new TH1D("hNumPoints",";Fit Points",50,0.,50.);
+  TH1D *hNumPointsCut = new TH1D("hNumPointsCut","Fit Points",50,0.,50.);
+  TH1D *hTimingCurve = new TH1D("hTimingCurve",";Timing Difference [ps]",6000,15000.,45000.);
+  TH1D *hTimingCurveCut = new TH1D("hTimingCurveCut","Timing Difference [ps]",6000,15000.,45000.);
+  TH2D *hTimingCurveVsAmplitude = new TH2D("hTimingCurveVsAmplitude",";Amplitude [V];Timing Difference [ps]",500,0.,0.5,10000,20000.,30000.);
+  TH2D *hTimingCurveVsNumPoints = new TH2D("hTimingCurveVsNumPoints",";Fit Points;Timing Difference [ps]",50,0.,50.,10000,20000.,30000.);
+  TH2D *hTimingCurveVsNumPointsCut = new TH2D("hTimingCurveVsNumPointsCut",";Fit Points;Timing Difference [ps]",50,0.,50.,10000,20000.,30000.);
+  TH2D *hNumPointsVsAmplitude = new TH2D("hNumPointsVsAmplitude",";Amplitude [V];Fit Points",500,0.,0.5,50,0.,50.);
 
   Int_t nentries = (Int_t)t->GetEntries();
   for(int i=0; i<nentries; i++)
@@ -43,12 +46,14 @@ int timingCurve(TString rootHistFname, double aCut = 0.0)
       hTimingCurve->Fill(hrppd50Time - fpd50Time);
       hTimingCurveVsAmplitude->Fill(hrppdAmp,hrppd50Time - fpd50Time);
       hTimingCurveVsNumPoints->Fill(hrppdPoints,hrppd50Time - fpd50Time);
+      hNumPointsVsAmplitude->Fill(hrppdAmp,hrppdPoints);
 
       if(hrppdAmp > aCut)
 	{
 	  hNumPointsCut->Fill(hrppdPoints);
-	  hTimingCurveCut->Fill(hrppd50Time - fpd50Time);
 	  hTimingCurveVsNumPointsCut->Fill(hrppdPoints,hrppd50Time - fpd50Time);
+	  if(hrppdPoints > 10) // Ensure Good Fit to Leading Edge
+	    hTimingCurveCut->Fill(hrppd50Time - fpd50Time);
 	}
     }
 
@@ -59,6 +64,7 @@ int timingCurve(TString rootHistFname, double aCut = 0.0)
 
   c1->cd(1);
   hTimingCurveCut->Draw("HIST");
+  hTimingCurveCut->SetTitle(Form("Timing Distribution: Amp > %.3f Run = %d",aCut,number));
 
   double amp = hTimingCurveCut->GetMaximum();
   double mean = hTimingCurveCut->GetBinCenter(hTimingCurveCut->GetMaximumBin());
@@ -82,6 +88,7 @@ int timingCurve(TString rootHistFname, double aCut = 0.0)
   TLine *plAmp = new TLine(aCut,0.0,aCut,ulimit);
   plAmp->SetLineColor(kRed);
   plAmp->Draw("SAME");
+  gPad->SetLogy();
 
   TCanvas *c3 = new TCanvas("c3","Number of Points",800,600);
   c3->Clear();
@@ -92,6 +99,7 @@ int timingCurve(TString rootHistFname, double aCut = 0.0)
   hNumPoints->Draw("HIST");
   hNumPointsCut->SetLineColor(kRed);
   hNumPointsCut->Draw("HISTSAME");
+  gPad->SetLogy();
 
   TCanvas *c4 = new TCanvas("c4","Raw Timing Curve",800,600);
   c4->Clear();
@@ -117,6 +125,7 @@ int timingCurve(TString rootHistFname, double aCut = 0.0)
 
   c6->cd(1);
   hTimingCurveVsNumPoints->Draw("COLZ");
+  gPad->SetLogz();
 
   TCanvas *c7 = new TCanvas("c7","Raw Timing Curve Vs Numbrer of HRPPD fit Points after Amp Cut",800,600);
   c7->Clear();
@@ -124,6 +133,14 @@ int timingCurve(TString rootHistFname, double aCut = 0.0)
 
   c7->cd(1);
   hTimingCurveVsNumPointsCut->Draw("COLZ");
+  gPad->SetLogz();
+
+  TCanvas *c8 = new TCanvas("c8","Number of Points Vs Amplitude",800,600);
+  c8->Clear();
+  c8->Divide(1,1);
+
+  c8->cd(1);
+  hNumPointsVsAmplitude->Draw("COLZ");
 
   return 0;
 }

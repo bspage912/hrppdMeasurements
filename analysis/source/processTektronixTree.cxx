@@ -38,8 +38,8 @@ int main(int argc, char* argv[]) {
   // Set Up Input Tree Reader
   TTreeReader tree_reader(mychain);
 
-  unsigned fpdOk = 0, hrppdOk = 0, fpdPeakIndex = 0, hrppdPeakIndex = 0, fpdPoints = 0, hrppdPoints = 0;
-  double fpdBase = 0.0, hrppdBase = 0.0, fpdAmp = 0.0, hrppdAmp = 0.0, fpd50Time = 0.0, hrppd10Time = 0.0, hrppd50Time = 0.0, hrppd90Time = 0.0;
+  unsigned fpdOk = 0, hrppdOk = 0, hrppdWidthOk = 0, fpdPeakIndex = 0, hrppdPeakIndex = 0, fpdPoints = 0, hrppdPoints = 0, hrppdWidth = 0;
+  double fpdBase = 0.0, hrppdBase = 0.0, fpdAmp = 0.0, hrppdAmp = 0.0, fpd50Time = 0.0, hrppdCharge = 0.0, hrppd10Time = 0.0, hrppd50Time = 0.0, hrppd90Time = 0.0;
   tout->Branch("fpdOk", &fpdOk, "fpdOk/I");
   tout->Branch("fpdPeakIndex", &fpdPeakIndex, "fpdPeakIndex/I");
   tout->Branch("fpdPoints", &fpdPoints, "fpdPoints/I");
@@ -47,10 +47,13 @@ int main(int argc, char* argv[]) {
   tout->Branch("fpdAmp", &fpdAmp, "fpdAmp/D");
   tout->Branch("fpd50Time", &fpd50Time, "fpd50Time/D");
   tout->Branch("hrppdOk",&hrppdOk, "hrppdOk/I");
+  tout->Branch("hrppdWidthOk", &hrppdWidthOk, "hrppdWidthOk/I");
   tout->Branch("hrppdPeakIndex", &hrppdPeakIndex, "hrppdPeakIndex/I");
   tout->Branch("hrppdPoints", &hrppdPoints, "hrppdPoints/I");
   tout->Branch("hrppdBase", &hrppdBase, "hrppdBase/D");
   tout->Branch("hrppdAmp", &hrppdAmp, "hrppdAmp/D");
+  tout->Branch("hrppdWidth", &hrppdWidth, "hrppdWidth/I");
+  tout->Branch("hrppdCharge", &hrppdCharge, "hrppdCharge/D");
   tout->Branch("hrppd10Time", &hrppd10Time, "hrppd10Time/D");
   tout->Branch("hrppd50Time", &hrppd50Time, "hrppd50Time/D");
   tout->Branch("hrppd90Time", &hrppd90Time, "hrppd90Time/D");
@@ -82,6 +85,8 @@ int main(int argc, char* argv[]) {
 
   TH1D *hHRPPDPointsInFit = new TH1D("hHRPPDPointsInFit","",100,0.,100.);
   TH2D *hHRPPDEdgeEndVsBeginIndex = new TH2D("hHRPPDEdgeEndVsBeginIndex","",2000,0.,2000.,2000,0.,2000.);
+  TH1D *hHRPPDPulseWidth = new TH1D("hHRPPDPulseWidth","",150,0.,150.);
+  TH1D *hHRPPDPulseCharge = new TH1D("hHRPPDPulseCharge","",300,-0.05,0.25);
 
   // Timing
   TH2D *hHRPPDFPDTimeDiffVsAmp = new TH2D("hHRPPDFPDTimeDiffVsAmp","",1000,0.,0.5,30000,15000.,45000.);
@@ -248,7 +253,10 @@ int main(int argc, char* argv[]) {
     // 4. Define Limits of Leading Edge and Fit
     int hrppdEdgeBeginIndex = -1;
     int hrppdEdgeEndIndex = -1;
+    int hrppdTrailingIndex = -1;
     int pointsInHRPPDFit = 0;
+    int hrppdPulseWidth = 0;
+    double hrppdPulseCharge = 0.0;
     double hrppd10Percent = 0.0;
     double hrppd50Percent = 0.0;
     double hrppd90Percent = 0.0;
@@ -263,13 +271,31 @@ int main(int argc, char* argv[]) {
 
 	hrppdEdgeEndIndex = hrppd.getLeadingEdgeIndex(hrppdBottomIndex,hrppdThresh90,_HRPPD_EDGE_SEARCH_LIMIT_);
 	hrppdEdgeBeginIndex = hrppd.getLeadingEdgeIndex(hrppdBottomIndex,hrppdThresh10,_HRPPD_EDGE_SEARCH_LIMIT_);
+	hrppdTrailingIndex = hrppd.getTrailingEdgeIndex(hrppdBottomIndex,hrppdThresh10,_HRPPD_EDGE_SEARCH_LIMIT_+50); // Trailing edge is extended
 
 	// Width of the Leading Edge
 	pointsInHRPPDFit = hrppdEdgeEndIndex - hrppdEdgeBeginIndex + 1;
 
+	// Width of Pulse
+	hrppdPulseWidth = hrppdTrailingIndex - hrppdEdgeBeginIndex + 1;
+
+	// Calculate Integrated Charge
+	double q = 0.0;
+	if(hrppdTrailingIndex != -1)
+	  {
+	    for(unsigned i=hrppdEdgeBeginIndex; i<=hrppdTrailingIndex; i++)
+	      {
+		q += (hrppdBaseline - hrppd.getValue(i));//*20E-12;
+	      }
+	    q /= 50.0;
+	  }
+	hrppdPulseCharge = q;
+	
 	// Reference Histos
 	hHRPPDPointsInFit->Fill(pointsInHRPPDFit);
 	hHRPPDEdgeEndVsBeginIndex->Fill(hrppdEdgeBeginIndex,hrppdEdgeEndIndex);
+	hHRPPDPulseWidth->Fill(hrppdPulseWidth);
+	hHRPPDPulseCharge->Fill(q);
 
 	// Do Linear Fit on Pulse Edge
 	if(hrppdEdgeBeginIndex > -1 && hrppdEdgeEndIndex > -1) // Make sure ranges are defined
@@ -283,10 +309,13 @@ int main(int argc, char* argv[]) {
 
     // Set HRPPD Tree Variables
     if(hrppdBottomIndex > -1) hrppdOk = 1;
+    if(hrppdTrailingIndex != -1) hrppdWidthOk = 1;
     hrppdPeakIndex = hrppdBottomIndex;
     hrppdPoints = pointsInHRPPDFit;
     hrppdBase = hrppdBaseline;
     hrppdAmp = hrppdAmplitude;
+    hrppdWidth = hrppdPulseWidth;
+    hrppdCharge = hrppdPulseCharge;
     hrppd10Time = hrppd10Percent;
     hrppd50Time = hrppd50Percent;
     hrppd90Time = hrppd90Percent;

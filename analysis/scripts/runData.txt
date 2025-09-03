@@ -1,0 +1,165 @@
+run80005
+  Timing Mean = 25039.1
+  Sigma       = 50.94
+
+run80006
+  Timing Mean = 24851.9
+  Sigma       = 44.08
+
+run80007
+  Timing Mean = 24767.8
+  Sigma       = 36.91
+
+run80008
+  Timing Mean = 24710.4
+  Sigma       = 33.87
+
+run80009
+  Timing Mean = 24604.0
+  Sigma       = 27.84
+
+run80010
+  Timing Mean = 24550.5
+  Sigma       = 23.59
+
+run80011
+  Timing Mean = 24518
+  Sigma       = 20.89
+
+run80012
+  Timing Mean = 24806.7
+  Sigma       = 29.67
+
+run80013
+  Timing Mean = 24480.0
+  Sigma       = 26.68
+
+run80014
+  Timing Mean = 24532.8
+  Sigma       = 29.20
+
+run80015
+  Timing Mean = 24696.8
+  Sigma       = 26.40
+
+run80016
+  Timing Mean = 24789.2
+  Sigma       = 27.70
+
+run80017
+  Timing Mean = 24793.3
+  Sigma       = 31.28
+
+run80018
+  Timing Mean = 24799.5
+  Sigma       = 44.68
+
+run80019
+  Timing Mean = 24853.1
+  Sigma       = 27.69
+
+run80020
+  Timing Mean = 24683.7
+  Sigma       = 19.90
+
+run80021
+  Timing Mean = 24651.7
+  Sigma       = 16.16
+
+run80022
+  Timing Mean = 25136.7
+  Sigma       = 41.27
+
+run80023
+  Timing Mean = 24834.0
+  Sigma       = 22.65
+
+run80024
+  Timing Mean = 24666.5
+  Sigma       = 14.27
+
+run80025
+  Timing Mean = 24633.7
+  Sigma       = 13.27
+
+run80026
+  Timing Mean = 25112.8
+  Sigma       = 39.83
+
+run80027
+  Timing Mean = 24809.9
+  Sigma       = 20.17
+
+run80028
+  Timing Mean = 24632.0
+  Sigma       = 12.91
+
+run80029
+  Timing Mean = 24379.4
+  Sigma       = 14.26
+
+run80030
+  Timing Mean = 24378.4
+  Sigma       = 15.23
+
+run80031
+  Timing Mean = 24375.1
+  Sigma       = 13.72
+
+run80032
+  Timing Mean = 24376.9
+  Sigma       = 14.22
+
+run80033
+  Timing Mean = 24376.9
+  Sigma       = 15.41
+
+run8003033 (runs 80030 - 80033 combined)
+  Timing Mean = 24376.1
+  Sigma       = 14.54
+
+run80034
+  Timing Mean = 24383.2
+  Sigma       = 17.30
+
+run80035
+  Timing Mean = 24364.0
+  Sigma       = 14.95
+
+run80036
+  Timing Mean = 24366.3
+  Sigma       = 15.55
+
+run80037
+  Timing Mean = 24365.8
+  Sigma       = 15.59
+
+run80038
+  Timing Mean = 24365.7
+  Sigma       = 15.54
+
+run8003538 (runs 80035 - 80038 combined)
+  Timing Mean = 24364.3
+  Sigma       = 15.15
+
+run80039
+  Timing Mean = 24509.3
+  Sigma       = 18.98
+
+run80040
+  Timing Mean = 24648.7
+  Sigma       = 14.07
+
+run80041
+  Timing Mean = 24406.8
+  Sigma       = 16.82
+
+run80042
+  Timing Mean = 24413.9
+  Sigma       = 18.17
+
+run80043
+  Timing Mean = 24417.5
+  Sigma       = 19.59
+
+
