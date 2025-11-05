@@ -25,7 +25,7 @@ print(scope.query('*idn?'))
 
 # Print Info
 scope.write('HEADER 0')
-scope.write('DATA:SOURCE CH1,CH5')
+scope.write('DATA:SOURCE CH1,CH2,CH3,CH4,CH5,CH6')
 preamble = scope.query('WFMOutpre?')
 print(preamble)
 
@@ -40,10 +40,30 @@ scope.write('CH1:SCALE 100E-3')
 scope.write('CH1:BANDWIDTH 10E+9')
 scope.write('CH1:TERMINATION 50.0E+0')
 
+# Channel 2 Setup
+scope.write('CH2:SCALE 100E-3')
+scope.write('CH2:BANDWIDTH 10E+9')
+scope.write('CH2:TERMINATION 50.0E+0')
+
+# Channel 3 Setup
+scope.write('CH3:SCALE 100E-3')
+scope.write('CH3:BANDWIDTH 10E+9')
+scope.write('CH3:TERMINATION 50.0E+0')
+
+# Channel 4 Setup
+scope.write('CH4:SCALE 100E-3')
+scope.write('CH4:BANDWIDTH 10E+9')
+scope.write('CH4:TERMINATION 50.0E+0')
+
 # Channel 5 Setup
 scope.write('CH5:SCALE 10E-3')
 scope.write('CH5:BANDWIDTH 10E+9')
 scope.write('CH5:TERMINATION 50.0E+0')
+
+# Channel 6 Setup
+scope.write('CH6:SCALE 100E-3')
+scope.write('CH6:BANDWIDTH 10E+9')
+scope.write('CH6:TERMINATION 50.0E+0')
 
 # Set Horizontal Parameters
 scope.write('HORIZONTAL:MODE MANUAL')
