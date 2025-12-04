@@ -58,6 +58,19 @@ int waveform::getLeadingEdgeIndex(unsigned start, double threshold, unsigned lim
   return -1;
 } // getLeadingEdgeIndex
 
+int waveform::getTrailingEdgeIndex(unsigned start, double threshold, unsigned limit)
+{
+  // Scan waveform to find index above threshold
+  // Assume negative signal and work forward from start point until limit
+  for(unsigned i=start; i<start+limit; i++)
+    {
+      if(mVal[i] > threshold)
+        return i;
+    }
+
+  return -1;
+} // getTrailingEdgeIndex
+
 double waveform::fitLeadingEdge(unsigned from, unsigned to, double amp, double base, double wkpt)
 {
   // Do a linear least-squares fit to the pulse leading edge and return time (in ps) of the point wkpt% of the pulse amplitude
@@ -85,3 +98,4 @@ double waveform::fitLeadingEdge(unsigned from, unsigned to, double amp, double b
 
   return ((base - wkpt*amp) - a)/b;
 } // fitLeadingEdge
+

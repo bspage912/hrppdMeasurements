@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
   TFile *ofile = TFile::Open(argv[2],"recreate");
 
   // Create Output Tree to Allow Offline Analysis
-  auto tout = new TTree("t", "Analyzed Scope Tree");
+  //auto tout = new TTree("t", "Analyzed Scope Tree");
 
   //auto *hb1 = new TH1D("hb1", "", 100, -0.020, 0.020);
   //auto *hb4 = new TH1D("hb4", "", 100, -0.010, 0.010);
@@ -38,6 +38,7 @@ int main(int argc, char* argv[]) {
   // Set Up Input Tree Reader
   TTreeReader tree_reader(mychain);
 
+  /*
   unsigned trgOk = 0, trgPoints = 0;
   double trgBaseUp = 0.0, trgBaseDown = 0.0, trgAmp = 0.0, trg50Time = 0.0;
   unsigned hrppdOk1 = 0, hrppdPeakIndex1 = 0, hrppdPoints1 = 0, hrppdWidth1 = 0;
@@ -113,29 +114,30 @@ int main(int argc, char* argv[]) {
   tout->Branch("hrppd10Time5", &hrppd10Time5, "hrppd10Time5/D");
   tout->Branch("hrppd50Time5", &hrppd50Time5, "hrppd50Time5/D");
   tout->Branch("hrppd90Time5", &hrppd90Time5, "hrppd90Time5/D");
+  */
   
 
   //TTreeReaderArray<double> eventTime    = {tree_reader, "eventTime"};
   TTreeReaderArray<double> signalTime   = {tree_reader, "TIME"};
   TTreeReaderArray<double> trigger = {tree_reader, "CH1"};
   TTreeReaderArray<double> signal1 = {tree_reader, "CH2"};
-  TTreeReaderArray<double> signal2 = {tree_reader, "CH2"}; //CH3
-  TTreeReaderArray<double> signal3 = {tree_reader, "CH2"};
-  TTreeReaderArray<double> signal4 = {tree_reader, "CH2"}; // CH5
-  TTreeReaderArray<double> signal5 = {tree_reader, "CH2"}; // CH6
+  //TTreeReaderArray<double> signal2 = {tree_reader, "CH2"}; //CH3
+  //TTreeReaderArray<double> signal3 = {tree_reader, "CH4"};
+  //TTreeReaderArray<double> signal4 = {tree_reader, "CH2"}; // CH5
+  //TTreeReaderArray<double> signal5 = {tree_reader, "CH2"}; // CH6
 
   // Histograms
   TH1D *sigTrigOffset1 = new TH1D("sigTrigOffset1","",10000,0.,10000.);
-  TH1D *sigTrigOffset2 = new TH1D("sigTrigOffset2","",10000,0.,10000.);
-  TH1D *sigTrigOffset3 = new TH1D("sigTrigOffset3","",10000,0.,10000.);
-  TH1D *sigTrigOffset4 = new TH1D("sigTrigOffset4","",10000,0.,10000.);
-  TH1D *sigTrigOffset5 = new TH1D("sigTrigOffset5","",10000,0.,10000.);
+  //TH1D *sigTrigOffset2 = new TH1D("sigTrigOffset2","",10000,0.,10000.);
+  //TH1D *sigTrigOffset3 = new TH1D("sigTrigOffset3","",10000,0.,10000.);
+  //TH1D *sigTrigOffset4 = new TH1D("sigTrigOffset4","",10000,0.,10000.);
+  //TH1D *sigTrigOffset5 = new TH1D("sigTrigOffset5","",10000,0.,10000.);
 
   TH2D *ampVsSigTrigOffset1 = new TH2D("ampVsSigTrigOffset1","",10000,0.,10000.,200,0.,0.1);
-  TH2D *ampVsSigTrigOffset2 = new TH2D("ampVsSigTrigOffset2","",10000,0.,10000.,200,0.,0.1);
-  TH2D *ampVsSigTrigOffset3 = new TH2D("ampVsSigTrigOffset3","",10000,0.,10000.,200,0.,0.1);
-  TH2D *ampVsSigTrigOffset4 = new TH2D("ampVsSigTrigOffset4","",10000,0.,10000.,200,0.,0.1);
-  TH2D *ampVsSigTrigOffset5 = new TH2D("ampVsSigTrigOffset5","",10000,0.,10000.,200,0.,0.1);
+  //TH2D *ampVsSigTrigOffset2 = new TH2D("ampVsSigTrigOffset2","",10000,0.,10000.,200,0.,0.1);
+  //TH2D *ampVsSigTrigOffset3 = new TH2D("ampVsSigTrigOffset3","",10000,0.,10000.,200,0.,0.1);
+  //TH2D *ampVsSigTrigOffset4 = new TH2D("ampVsSigTrigOffset4","",10000,0.,10000.,200,0.,0.1);
+  //TH2D *ampVsSigTrigOffset5 = new TH2D("ampVsSigTrigOffset5","",10000,0.,10000.,200,0.,0.1);
 
   // TRG
   //TH1D *hFPDBottom = new TH1D("hFPDBottom","",200,-1.,1.);
@@ -160,6 +162,13 @@ int main(int argc, char* argv[]) {
   TH1D *hHRPPDPulseWidth1 = new TH1D("hHRPPDPulseWidth1","",300,0.,300.);
   TH1D *hHRPPDPulseCharge1 = new TH1D("hHRPPDPulseCharge1","",900,-0.05,0.25);
 
+  TH2D *hWF[10];
+  for(int i=0; i<10; i++)
+    {
+      hWF[i] = new TH2D(Form("hWF_%d",i),"",10000,0.,10000.,1000,-0.95,0.05);
+    }
+
+  /*
   TH1D *hHRPPDBottom2 = new TH1D("hHRPPDBottom2","",200,-0.1,0.1);
   TH1D *hHRPPDBottomIndex2 = new TH1D("hHRPPDBottomIndex2","",5000,0.,5000.);
   TH1D *hHRPPDBaseline2 = new TH1D("hHRPPDBaseline2","",2000,-0.1,0.1);
@@ -203,13 +212,14 @@ int main(int argc, char* argv[]) {
   TH2D *hHRPPDEdgeEndVsBeginIndex5 = new TH2D("hHRPPDEdgeEndVsBeginIndex5","",2000,0.,2000.,2000,0.,2000.);
   TH1D *hHRPPDPulseWidth5 = new TH1D("hHRPPDPulseWidth5","",300,0.,300.);
   TH1D *hHRPPDPulseCharge5 = new TH1D("hHRPPDPulseCharge5","",900,-0.05,0.25);
+  */
 
   // Timing
-  TH2D *hHRPPDFPDTimeDiffVsAmp1 = new TH2D("hHRPPDFPDTimeDiffVsAmp1","",1000,0.,0.5,30000,110000.,140000.);
-  TH2D *hHRPPDFPDTimeDiffVsAmp2 = new TH2D("hHRPPDFPDTimeDiffVsAmp2","",1000,0.,0.5,30000,110000.,140000.);
-  TH2D *hHRPPDFPDTimeDiffVsAmp3 = new TH2D("hHRPPDFPDTimeDiffVsAmp3","",1000,0.,0.5,30000,110000.,140000.);
-  TH2D *hHRPPDFPDTimeDiffVsAmp4 = new TH2D("hHRPPDFPDTimeDiffVsAmp4","",1000,0.,0.5,30000,110000.,140000.);
-  TH2D *hHRPPDFPDTimeDiffVsAmp5 = new TH2D("hHRPPDFPDTimeDiffVsAmp5","",1000,0.,0.5,30000,110000.,140000.);
+  TH2D *hHRPPDFPDTimeDiffVsAmp1 = new TH2D("hHRPPDFPDTimeDiffVsAmp1","",1000,0.,0.5,30000,110000.,104000.);
+  //TH2D *hHRPPDFPDTimeDiffVsAmp2 = new TH2D("hHRPPDFPDTimeDiffVsAmp2","",1000,0.,0.5,30000,110000.,140000.);
+  //TH2D *hHRPPDFPDTimeDiffVsAmp3 = new TH2D("hHRPPDFPDTimeDiffVsAmp3","",1000,0.,0.5,30000,110000.,140000.);
+  //TH2D *hHRPPDFPDTimeDiffVsAmp4 = new TH2D("hHRPPDFPDTimeDiffVsAmp4","",1000,0.,0.5,30000,110000.,140000.);
+  //TH2D *hHRPPDFPDTimeDiffVsAmp5 = new TH2D("hHRPPDFPDTimeDiffVsAmp5","",1000,0.,0.5,30000,110000.,140000.);
 
   // Define Constants
   const double _TRG_THRESHOLD_ = -0.2;
@@ -228,42 +238,43 @@ int main(int argc, char* argv[]) {
   while(tree_reader.Next()) {    
     waveform trg("NIM Trigger Pulse",signalTime,trigger);
     waveform hrppd1("HRPPD1",signalTime,signal1);
-    waveform hrppd2("HRPPD2",signalTime,signal2);
-    waveform hrppd3("HRPPD3",signalTime,signal3);
-    waveform hrppd4("HRPPD4",signalTime,signal4);
-    waveform hrppd5("HRPPD5",signalTime,signal5);
+    //waveform hrppd2("HRPPD2",signalTime,signal2);
+    //waveform hrppd3("HRPPD3",signalTime,signal3);
+    //waveform hrppd4("HRPPD4",signalTime,signal4);
+    //waveform hrppd5("HRPPD5",signalTime,signal5);
 
     int trigThresh = trg.getThresholdIndex(_TRG_THRESHOLD_);
     int sigPeak1 = hrppd1.findMinimum(0,signal1.GetSize()-1);
-    int sigPeak2 = hrppd2.findMinimum(0,signal2.GetSize()-1);
-    int sigPeak3 = hrppd3.findMinimum(0,signal3.GetSize()-1);
-    int sigPeak4 = hrppd4.findMinimum(0,signal4.GetSize()-1);
-    int sigPeak5 = hrppd5.findMinimum(0,signal5.GetSize()-1);
+    //int sigPeak2 = hrppd2.findMinimum(0,signal2.GetSize()-1);
+    //int sigPeak3 = hrppd3.findMinimum(0,signal3.GetSize()-1);
+    //int sigPeak4 = hrppd4.findMinimum(0,signal4.GetSize()-1);
+    //int sigPeak5 = hrppd5.findMinimum(0,signal5.GetSize()-1);
 
     sigTrigOffset1->Fill(sigPeak1 - trigThresh);
-    sigTrigOffset2->Fill(sigPeak2 - trigThresh);
-    sigTrigOffset3->Fill(sigPeak3 - trigThresh);
-    sigTrigOffset4->Fill(sigPeak4 - trigThresh);
-    sigTrigOffset5->Fill(sigPeak5 - trigThresh);
+    //sigTrigOffset2->Fill(sigPeak2 - trigThresh);
+    //sigTrigOffset3->Fill(sigPeak3 - trigThresh);
+    //sigTrigOffset4->Fill(sigPeak4 - trigThresh);
+    //sigTrigOffset5->Fill(sigPeak5 - trigThresh);
 
     ampVsSigTrigOffset1->Fill(sigPeak1-trigThresh,std::abs(hrppd1.getValue(sigPeak1)));
-    ampVsSigTrigOffset2->Fill(sigPeak2-trigThresh,std::abs(hrppd2.getValue(sigPeak2)));
-    ampVsSigTrigOffset3->Fill(sigPeak3-trigThresh,std::abs(hrppd3.getValue(sigPeak3)));
-    ampVsSigTrigOffset4->Fill(sigPeak4-trigThresh,std::abs(hrppd4.getValue(sigPeak4)));
-    ampVsSigTrigOffset5->Fill(sigPeak5-trigThresh,std::abs(hrppd5.getValue(sigPeak5)));
+    //ampVsSigTrigOffset2->Fill(sigPeak2-trigThresh,std::abs(hrppd2.getValue(sigPeak2)));
+    //ampVsSigTrigOffset3->Fill(sigPeak3-trigThresh,std::abs(hrppd3.getValue(sigPeak3)));
+    //ampVsSigTrigOffset4->Fill(sigPeak4-trigThresh,std::abs(hrppd4.getValue(sigPeak4)));
+    //ampVsSigTrigOffset5->Fill(sigPeak5-trigThresh,std::abs(hrppd5.getValue(sigPeak5)));
   }
 
   int SIGNAL_OFFSET1 = (sigTrigOffset1->GetMaximumBin()) - 1;
-  int SIGNAL_OFFSET2 = (sigTrigOffset2->GetMaximumBin()) - 1;
-  int SIGNAL_OFFSET3 = (sigTrigOffset3->GetMaximumBin()) - 1;
-  int SIGNAL_OFFSET4 = (sigTrigOffset4->GetMaximumBin()) - 1;
-  int SIGNAL_OFFSET5 = (sigTrigOffset5->GetMaximumBin()) - 1;
+  //int SIGNAL_OFFSET2 = (sigTrigOffset2->GetMaximumBin()) - 1;
+  //int SIGNAL_OFFSET3 = (sigTrigOffset3->GetMaximumBin()) - 1;
+  //int SIGNAL_OFFSET4 = (sigTrigOffset4->GetMaximumBin()) - 1;
+  //int SIGNAL_OFFSET5 = (sigTrigOffset5->GetMaximumBin()) - 1;
   cout << "End Calibration" << endl;
-  cout << "Signal Offset from Trigger = " << SIGNAL_OFFSET1 << " " << SIGNAL_OFFSET2 << " " << SIGNAL_OFFSET3 << " " << SIGNAL_OFFSET4 << " " << SIGNAL_OFFSET5 << endl;
+  cout << "Signal Offset from Trigger = " << SIGNAL_OFFSET1 << endl; //" " << SIGNAL_OFFSET2 << " " << SIGNAL_OFFSET3 << " " << SIGNAL_OFFSET4 << " " << SIGNAL_OFFSET5 << endl;
   cout << endl;
 
   // Loop Over Events and Do Analysis
   int NEVENTS = 0;
+  int numWF = 0;
   tree_reader.Restart();
   while(tree_reader.Next()) {
     if(NEVENTS%1000 == 0)
@@ -271,10 +282,12 @@ int main(int argc, char* argv[]) {
     
     waveform trg("NIM Trigger Pulse",signalTime,trigger);
     waveform hrppd1("HRPPD1",signalTime,signal1);
-    waveform hrppd2("HRPPD2",signalTime,signal2);
-    waveform hrppd3("HRPPD3",signalTime,signal3);
-    waveform hrppd4("HRPPD4",signalTime,signal4);
-    waveform hrppd5("HRPPD5",signalTime,signal5);
+    //waveform hrppd2("HRPPD2",signalTime,signal2);
+    //waveform hrppd3("HRPPD3",signalTime,signal3);
+    //waveform hrppd4("HRPPD4",signalTime,signal4);
+    //waveform hrppd5("HRPPD5",signalTime,signal5);
+
+    //int numWF = 0;
 
     //==================================================
     //              Trigger (FPD) Pulse
@@ -290,7 +303,7 @@ int main(int argc, char* argv[]) {
     int trgTriggerIndex = -1;
     //bool fpdTriggerFlag = true;
 
-    trgOk = 0;
+    //trgOk = 0;
 
     // Get Threshold Crossing
     trgTriggerIndex = trg.getThresholdIndex(_TRG_THRESHOLD_);
@@ -359,13 +372,13 @@ int main(int argc, char* argv[]) {
       }
 
     // Set FPD Tree Variables
-    if(trgTriggerIndex > -1) trgOk = 1;
-    //fpdPeakIndex = fpdBottomIndex;
-    trgPoints = pointsInTRGFit;
-    trgBaseUp = trgBaselineUp;
-    trgBaseDown = trgBaselineDown;
-    trgAmp = trgAmplitude;
-    trg50Time = trg50Percent;
+    //if(trgTriggerIndex > -1) trgOk = 1;
+    ////fpdPeakIndex = fpdBottomIndex;
+    //trgPoints = pointsInTRGFit;
+    //trgBaseUp = trgBaselineUp;
+    //trgBaseDown = trgBaselineDown;
+    //trgAmp = trgAmplitude;
+    //trg50Time = trg50Percent;
 
 
     //==================================================
@@ -377,7 +390,7 @@ int main(int argc, char* argv[]) {
     double hrppdAmplitude1 = 0.;
     int hrppdBottomIndex1 = -1;
 
-    hrppdOk1 = 0;
+    //hrppdOk1 = 0;
 
     if(trgTriggerIndex > -1) // Only look for HRPPD pulse if there was a trigger
       {
@@ -463,22 +476,33 @@ int main(int argc, char* argv[]) {
 	    hrppd10Percent1 = hrppd1.fitLeadingEdge(hrppdEdgeBeginIndex1,hrppdEdgeEndIndex1,hrppdAmplitude1,hrppdBaseline1,0.10);
 	    hrppd50Percent1 = hrppd1.fitLeadingEdge(hrppdEdgeBeginIndex1,hrppdEdgeEndIndex1,hrppdAmplitude1,hrppdBaseline1,workingpoint);
 	    hrppd90Percent1 = hrppd1.fitLeadingEdge(hrppdEdgeBeginIndex1,hrppdEdgeEndIndex1,hrppdAmplitude1,hrppdBaseline1,0.90);
-	  }	
+	  }
+
+	// Get Waveform
+	if(hrppdAmplitude1 > 0.03 && numWF < 10) // 0.03
+	  {
+	    for(unsigned i=0; i<10000; i++)
+	      {
+		hWF[numWF]->Fill(i,hrppd1.getValue(i));
+	      }
+
+	    numWF++;
+	  }
       }
 
     // Set HRPPD Tree Variables
-    if(hrppdBottomIndex1 > -1) hrppdOk1 = 1;
-    hrppdPeakIndex1 = hrppdBottomIndex1;
-    hrppdPoints1 = pointsInHRPPDFit1;
-    hrppdBase1 = hrppdBaseline1;
-    hrppdAmp1 = hrppdAmplitude1;
-    hrppdWidth1 = hrppdPulseWidth1;
-    hrppdCharge1 = hrppdPulseCharge1;
-    hrppd10Time1 = hrppd10Percent1;
-    hrppd50Time1 = hrppd50Percent1;
-    hrppd90Time1 = hrppd90Percent1;
+    //if(hrppdBottomIndex1 > -1) hrppdOk1 = 1;
+    //hrppdPeakIndex1 = hrppdBottomIndex1;
+    //hrppdPoints1 = pointsInHRPPDFit1;
+    //hrppdBase1 = hrppdBaseline1;
+    //hrppdAmp1 = hrppdAmplitude1;
+    //hrppdWidth1 = hrppdPulseWidth1;
+    //hrppdCharge1 = hrppdPulseCharge1;
+    //hrppd10Time1 = hrppd10Percent1;
+    //hrppd50Time1 = hrppd50Percent1;
+    //hrppd90Time1 = hrppd90Percent1;
 
-
+    /*
     //==================================================
     //             Signal (HRPPD) Pulse 2
     //==================================================
@@ -588,8 +612,10 @@ int main(int argc, char* argv[]) {
     hrppd10Time2 = hrppd10Percent2;
     hrppd50Time2 = hrppd50Percent2;
     hrppd90Time2 = hrppd90Percent2;
+    */
 
     
+    /*
     //==================================================
     //             Signal (HRPPD) Pulse 3
     //==================================================
@@ -699,8 +725,9 @@ int main(int argc, char* argv[]) {
     hrppd10Time3 = hrppd10Percent3;
     hrppd50Time3 = hrppd50Percent3;
     hrppd90Time3 = hrppd90Percent3;
+    */
 
-
+    /*
     //==================================================
     //             Signal (HRPPD) Pulse 4
     //==================================================
@@ -810,8 +837,9 @@ int main(int argc, char* argv[]) {
     hrppd10Time4 = hrppd10Percent4;
     hrppd50Time4 = hrppd50Percent4;
     hrppd90Time4 = hrppd90Percent4;
+    */
 
-
+    /*
     //==================================================
     //             Signal (HRPPD) Pulse 5
     //==================================================
@@ -921,7 +949,7 @@ int main(int argc, char* argv[]) {
     hrppd10Time5 = hrppd10Percent5;
     hrppd50Time5 = hrppd50Percent5;
     hrppd90Time5 = hrppd90Percent5;
-    
+    */
 
     //==================================================
     //                HRPPD - FPD Timing
@@ -933,6 +961,7 @@ int main(int argc, char* argv[]) {
 	hHRPPDFPDTimeDiffVsAmp1->Fill(hrppdAmplitude1,hrppdTRGTimeDiff1);
       }
 
+    /*
     if(trgTriggerIndex > -1 && hrppdBottomIndex2 > -1 && pointsInHRPPDFit2 > 2)
       {
 	double hrppdTRGTimeDiff2 = hrppd50Percent2 - trg50Percent;
@@ -956,16 +985,16 @@ int main(int argc, char* argv[]) {
 	double hrppdTRGTimeDiff5 = hrppd50Percent5 - trg50Percent;
 	hHRPPDFPDTimeDiffVsAmp5->Fill(hrppdAmplitude5,hrppdTRGTimeDiff5);
       }
+    */
 
-    tout->Fill();
+    //tout->Fill();
     NEVENTS++;
   }
 
-  tout->Write();
+  //tout->Write();
   ofile->Write();
   ofile->Close();
 
   cout << "Number of Events = " << NEVENTS << endl;
 
 }
-
