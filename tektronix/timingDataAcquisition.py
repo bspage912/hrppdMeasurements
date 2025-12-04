@@ -11,7 +11,9 @@ import sys
 
 progstart = time.perf_counter()
 
-oscilloscope_address = 'TCPIP::192.168.60.88::INSTR'
+#oscilloscope_address = 'TCPIP::192.168.60.88::INSTR'
+oscilloscope_address = 'TCPIP::192.168.60.99::INSTR'
+
 
 rm = visa.ResourceManager('@py')
 scope = rm.open_resource(oscilloscope_address)
@@ -32,45 +34,46 @@ print(preamble)
 # Trigger Setup
 scope.write('TRIGGER:A:TYPE EDGE')
 scope.write('TRIGGER:A:EDGE:SOURCE CH1')
-scope.write('TRIGGER:A:LOWERTHRESHOLD:CH1 -0.080')
+scope.write('TRIGGER:A:LOWERTHRESHOLD:CH1 -0.380')
 scope.write('TRIGGER:A:EDGE:SLOPE FALL')
 
 # Channel 1 Setup
-scope.write('CH1:SCALE 100E-3')
-scope.write('CH1:BANDWIDTH 10E+9')
+scope.write('CH1:SCALE 200E-3')
+scope.write('CH1:BANDWIDTH 8E+9')
 scope.write('CH1:TERMINATION 50.0E+0')
 
 # Channel 2 Setup
-scope.write('CH2:SCALE 100E-3')
-scope.write('CH2:BANDWIDTH 10E+9')
+scope.write('CH2:SCALE 20E-3')
+scope.write('CH2:BANDWIDTH 8E+9')
 scope.write('CH2:TERMINATION 50.0E+0')
 
 # Channel 3 Setup
-scope.write('CH3:SCALE 100E-3')
-scope.write('CH3:BANDWIDTH 10E+9')
-scope.write('CH3:TERMINATION 50.0E+0')
+#scope.write('CH3:SCALE 20E-3')
+#scope.write('CH3:BANDWIDTH 5E+9')
+#scope.write('CH3:TERMINATION 50.0E+0')
 
 # Channel 4 Setup
-scope.write('CH4:SCALE 100E-3')
-scope.write('CH4:BANDWIDTH 10E+9')
-scope.write('CH4:TERMINATION 50.0E+0')
+#scope.write('CH4:SCALE 20E-3')
+#scope.write('CH4:BANDWIDTH 8E+9')
+#scope.write('CH4:TERMINATION 50.0E+0')
 
 # Channel 5 Setup
-scope.write('CH5:SCALE 10E-3')
-scope.write('CH5:BANDWIDTH 10E+9')
-scope.write('CH5:TERMINATION 50.0E+0')
+#scope.write('CH5:SCALE 20E-3')
+#scope.write('CH5:BANDWIDTH 5E+9')
+#scope.write('CH5:TERMINATION 50.0E+0')
 
 # Channel 6 Setup
-scope.write('CH6:SCALE 100E-3')
-scope.write('CH6:BANDWIDTH 10E+9')
-scope.write('CH6:TERMINATION 50.0E+0')
+#scope.write('CH6:SCALE 20E-3')
+#scope.write('CH6:BANDWIDTH 5E+9')
+#scope.write('CH6:TERMINATION 50.0E+0')
 
 # Set Horizontal Parameters
 scope.write('HORIZONTAL:MODE MANUAL')
 scope.write('HORIZONTAL:MODE:SAMPLERATE 50E+9')
-scope.write('HORIZONTAL:MODE:RECORDLENGTH 2000')
-scope.write('HORIZONTAL:POSITION 10')
-scope.write('HORIZONTAL:MODE:SCALE 4E-9')
+scope.write('HORIZONTAL:MODE:RECORDLENGTH 10000')
+scope.write('HORIZONTAL:POSITION 8')
+scope.write('HORIZONTAL:MODE:SCALE 20E-9')
+
 
 # Acquisition
 scope.write('CLEAR')
@@ -81,7 +84,7 @@ scope.write('DISPLAY:WAVEFORM OFF')
 #scope.write('DISPLAY:WAVEFORM ON')
 
 # Parse comman line arguments: run directory and required statistics;
-qdir="C:/Users/Tek_Local_Admin/Tektronix/TekScope/Event/Brian/" + sys.argv[1]
+qdir="C:/Users/Tek_Local_Admin/Tektronix/TekScope/Event/B-Field/" + sys.argv[1]
 stat=sys.argv[2]
 
 # Set to Act on Trigger
@@ -90,7 +93,7 @@ scope.write('ACTONEVENT:LIMIT 1')
 scope.write('ACTONEVENT:LIMITCOUNT ' + stat)
 scope.write('SAVEONEVENT:FILEDEST ' + '\"' + qdir + '\"')
 scope.write('FILESystem:MKDir ' + '\"' + qdir + '\"')
-scope.write('SAVEONEVENT:FILENAME \"elmoTektronixData\"')
+scope.write('SAVEONEVENT:FILENAME \"BFieldData\"')
 scope.write('SAVEONEVENT:WAVEFORM:FILEFORMAT SPREADSHEET')
 scope.write('SAVEONEVENT:WAVEFORM:SOURCE ALL')
 #scope.write('ACTONEVENT:TRIGGER:ACTION:SRQ:STATE ON')
@@ -110,6 +113,8 @@ scope.write('ACQUIRE:STATE 0')
 acqEnd = time.perf_counter()
 print('Approximate Time: {} s'.format(acqEnd - acqStart))
 
+
 scope.close()
 
 print("\nEnd of Program")
+
