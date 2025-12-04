@@ -39,13 +39,14 @@ include_directories( ${PROJECT_SOURCE_DIR}/include )
 # Set Executable Names
 set( CSV2ROOT_EXE csv2root )
 set( PROCESS_EXE process )
+set( PROCESSWF_EXE processWF )
 set( WAVEFORM_LIB waveform )
 
 # Set Source Directories
 set( CSV2ROOT_SRC source/csv2root.cc )
 set( PROCESS_SRC source/processTektronixTree.cxx )
+set( PROCESSWF_SRC source/processWaveforms.cxx )
 set( WAVEFORM_SRC source/waveform.cxx )
-
 
 # Build Executables
 add_library( ${WAVEFORM_LIB} ${WAVEFORM_SRC} )
@@ -56,3 +57,7 @@ target_link_libraries(${CSV2ROOT_EXE} ${ROOT_LIBRARIES} )
 
 add_executable( ${PROCESS_EXE} ${PROCESS_SRC} )
 target_link_libraries(${PROCESS_EXE} ${ROOT_LIBRARIES} ${WAVEFORM_LIB} )
+
+add_executable( ${PROCESSWF_EXE} ${PROCESSWF_SRC} )
+target_link_libraries(${PROCESSWF_EXE} ${ROOT_LIBRARIES} ${WAVEFORM_LIB} )
+
