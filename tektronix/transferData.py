@@ -14,7 +14,8 @@ from datetime import datetime
 progstart = time.perf_counter()
 
 #visa_address = 'USB0::0x0699::0x0456::C000660::INSTR'
-oscilloscope_address = 'TCPIP::192.168.60.88::INSTR'
+#oscilloscope_address = 'TCPIP::192.168.60.88::INSTR'
+oscilloscope_address = 'TCPIP::192.168.60.99::INSTR'
 
 rm = visa.ResourceManager('@py')
 #scope = rm.open_resource(visa_address)
@@ -35,12 +36,16 @@ print(scope.query('*idn?'))
 #scope.write('FILESystem:CWD \"C:/Users/Tek_Local_Admin/Tektronix/TekScope/Event/ElmoTest/run37\"')
 #scope.write('FILESystem:CWD \"C:/Users/Tek_Local_Admin/Tektronix/TekScope/Event/noiseTest/run08\"')
 #scope.write('FILESystem:CWD \"C:/Users/Tek_Local_Admin/Tektronix/TekScope/Event/test\"')
-scope.write('FILESystem:CWD \"C:/Users/Tek_Local_Admin/Tektronix/TekScope/Event/Brian/run80044\"')
+#scope.write('FILESystem:CWD \"C:/Users/Tek_Local_Admin/Tektronix/TekScope/Event/Brian/run80044\"')
+# Transfer Extra B-Field Runs
+scope.write('FILESystem:CWD \"C:/Users/Tek_Local_Admin/Tektronix/TekScope/Event/B-Field/run290034\"')
 
 # Destination Path
-destPath="data00csv/"
+#destPath="data00csv/"
 # For AYK Transfer
 #destPath="/home/eic/ayk/Scope/data/run21/csv/"
+# For Extra B-Field Runs
+destPath="/DATA00/B-FIELD/TEKTRONIX/run290034/csv/"
 
 # Query Files
 filelist = scope.query('FILESystem:DIR?')

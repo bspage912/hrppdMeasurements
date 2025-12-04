@@ -66,6 +66,7 @@ int timingCurve(TString rootHistFname, int number, double aCut = 0.0)
   hTimingCurveCut->Draw("HIST");
   hTimingCurveCut->SetTitle(Form("Timing Distribution: Amp > %.3f Run = %d",aCut,number));
 
+  /*
   double amp = hTimingCurveCut->GetMaximum();
   double mean = hTimingCurveCut->GetBinCenter(hTimingCurveCut->GetMaximumBin());
   double sigma = 15.0;
@@ -74,6 +75,17 @@ int timingCurve(TString rootHistFname, int number, double aCut = 0.0)
 
   TF1 *f1 = new TF1("f1","crystalball",24000,26000);
   f1->SetParameters(amp,mean,sigma,alpha,n);
+  */
+
+  double amp = hTimingCurveCut->GetMaximum();
+  double mean = hTimingCurveCut->GetBinCenter(hTimingCurveCut->GetMaximumBin());
+  double sigma = 15.0;
+  double amp1 = 0.1*amp;
+  double mean1 = mean + 100.0;
+  double sigma1 = 30.0;
+
+  TF1 *f1 = new TF1("f1","gaus(0)+gaus(3)",24000,26000);
+  f1->SetParameters(amp,mean,sigma,amp1,mean1,sigma1);
 
   hTimingCurveCut->Fit(f1);
   f1->Draw("SAME");

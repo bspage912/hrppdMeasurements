@@ -1,0 +1,35 @@
+// Fit Amplitude Spectrum to Extract Gain
+
+int gainAnalysis(TString rootHistFname, int number)
+{
+  gStyle->SetOptStat(0);
+
+  TFile *fa = new TFile(rootHistFname);
+  assert(fa->IsOpen());
+
+  TTree *t = (TTree *)fa->Get("t");
+
+  //int fpdOk = 0, hrppdOk = 0, fpdPeakIndex = 0, hrppdPeakIndex = 0, fpdPoints = 0, hrppdPoints = 0;
+  double hrppdWidth = 0.0, hrppdCharge = 0.0;
+  t->SetBranchAddress("hrppdWidth", &hrppdWidth);
+  t->SetBranchAddress("hrppdCharge", &hrppdCharge);
+
+  TH1D *hHRPPDCharge = new TH1D("hHRPPDCharge","",300,-0.05,0.25);
+
+  Int_t nentries = (Int_t)t->GetEntries();
+  for(int i=0; i<nentries; i++)
+    {
+      t->GetEntry(i);
+
+      hHRPPDCharge->Fill(hrppdCharge);
+    }
+
+  // Draw Results
+  TCanvas *c1 = new TCanvas("c1","Pulse Charge",800,600);
+  c1->Clear();
+  c1->Divide(1,1);
+
+  c1->cd(1);
+  hHRPPDCharge->Draw("HIST");
+  gPad->SetLogy();
+}

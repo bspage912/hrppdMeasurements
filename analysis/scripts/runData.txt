@@ -57,46 +57,57 @@ run80018
 run80019
   Timing Mean = 24853.1
   Sigma       = 27.69
+  V/R Mean    = 0.0009
 
 run80020
   Timing Mean = 24683.7
   Sigma       = 19.90
+  V/R Mean    = 0.0052
 
 run80021
   Timing Mean = 24651.7
   Sigma       = 16.16
+  V/R Mean    = 0.0075
 
 run80022
   Timing Mean = 25136.7
   Sigma       = 41.27
+  V/R Mean    = 0.0025
 
 run80023
   Timing Mean = 24834.0
   Sigma       = 22.65
+  V/R Mean    = 0.0085
 
 run80024
   Timing Mean = 24666.5
   Sigma       = 14.27
+  V/R Mean    = 0.0258
 
 run80025
   Timing Mean = 24633.7
   Sigma       = 13.27
+  V/R Mean    = 0.0322
 
 run80026
   Timing Mean = 25112.8
   Sigma       = 39.83
+  V/R Mean    = 0.0264
 
 run80027
   Timing Mean = 24809.9
   Sigma       = 20.17
+  V/R Mean    = 0.0444
 
 run80028
   Timing Mean = 24632.0
   Sigma       = 12.91
+  V/R Mean    = 0.0544
 
 run80029
   Timing Mean = 24379.4
   Sigma       = 14.26
+  V/R Mean    = 0.0481
 
 run80030
   Timing Mean = 24378.4
@@ -125,6 +136,7 @@ run80034
 run80035
   Timing Mean = 24364.0
   Sigma       = 14.95
+  V/R Mean    = 0.0884
 
 run80036
   Timing Mean = 24366.3
@@ -145,14 +157,17 @@ run8003538 (runs 80035 - 80038 combined)
 run80039
   Timing Mean = 24509.3
   Sigma       = 18.98
+  V/R Mean    = 0.0388
 
 run80040
   Timing Mean = 24648.7
   Sigma       = 14.07
+  V/R Mean    = 0.0423
 
 run80041
   Timing Mean = 24406.8
   Sigma       = 16.82
+  V/R Mean    = 0.0468
 
 run80042
   Timing Mean = 24413.9
