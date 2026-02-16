@@ -1,0 +1,70 @@
+// Plot Timing Results
+
+void displayTiming()
+{
+  gStyle->SetOptStat(0);
+
+  double modAmpX[10] = {0.0, 350.0, 400.0, 450.0, 1150.0, 1200.0, 1250.0, 1550.0, 1600.0, 1650.0};
+
+  double rawSigma[10] = {38.3, 54.3, 44.7, 42.8, 46.7, 45.8, 41.2, 50.3, 48.8, 45.7};
+  double corSigma[10] = {46.2, 51.0, 42.0, 41.0, 47.2, 45.5, 53.6, 49.4, 48.2, 50.4};
+  double rawSigmaCut[10] = {36.1, 40.6, 39.0, 38.4, 42.8, 44.6, 45.6, 46.8, 51.1, 43.8};
+  double corSigmaCut[10] = {38.6, 41.5, 36.3, 35.6, 41.1, 45.0, 47.6, 46.0, 48.2, 44.3};
+  double rawSigmaOneGaus[10] = {49.4, 60.6, 51.0, 48.5, 51.6, 51.9, 53.7, 60.7, 55.4, 52.5};
+  double rawSigmaCutOneGaus[10] = {41.6, 44.1, 42.3, 42.5, 48.4, 49.1, 50.0, 54.6, 57.6, 45.6};
+  // Numbers = 25, 26, 27, 28, 29, 30, 31, 32, 33, 34
+  // Cut Values = 0.07, 0.04, 0.04, 0.055, 0.0175, 0.0175, 0.022, 0.0075, 0.01, 0.015
+  
+  // These numbers taken with restricted search window on HRPPD signal
+  //double rawSigma[10] = {38.3, 61.1, 44.9, 37.7, 46.0, 46.2, 50.5, 49.4, 46.7, 45.2};
+  //double corSigma[10] = {39.5, 64.4, 40.2, 40.2, 46.5, 45.6, 54.7, 46.6, 46.3, 48.2};
+  //double rawSigmaCut[10] = {38.8, 46.3, 38.7, 34.9, 44.5, 45.1, 45.0, 44.2, 45.3, 46.4};
+  //double corSigmaCut[10] = {36.5, 44.1, 34.2, 36.6, 45.1, 44.9, 46.7, 42.8, 43.6, 40.4};
+
+
+  TGraph *gRawSigmaModAmpX = new TGraph(10,modAmpX,rawSigma);
+  TGraph *gCorSigmaModAmpX = new TGraph(10,modAmpX,corSigma);
+  TGraph *gRawSigmaCutModAmpX = new TGraph(10,modAmpX,rawSigmaCut);
+  TGraph *gCorSigmaCutModAmpX = new TGraph(10,modAmpX,corSigmaCut);
+  TGraph *gRawSigmaModAmpXOneGaus = new TGraph(10,modAmpX, rawSigmaOneGaus);
+  TGraph *gRawSigmaCutModAmpXOneGaus = new TGraph(10,modAmpX, rawSigmaCutOneGaus);
+
+  TCanvas *c1 = new TCanvas("c1","Timing Resolution",800,600);
+  c1->Clear();
+  c1->Divide(1,1);
+  c1->cd(1);
+  TH2D *h1 = new TH2D("h1","Time Resolution Vs Magnet Current and HV Settings;Magnet Current [A];Timing Resolution [ps]",1,-100.,1700.0,1,20.,80.);
+  h1->Draw();
+
+  //gRawSigmaModAmpX->Draw("*");
+  //gRawSigmaModAmpX->SetMarkerStyle(20);
+  //gRawSigmaModAmpX->SetMarkerColor(kBlue);
+
+  //gCorSigmaModAmpX->Draw("*");
+  //gCorSigmaModAmpX->SetMarkerStyle(21);
+  //gCorSigmaModAmpX->SetMarkerColor(kRed);
+
+  gRawSigmaCutModAmpX->Draw("*");
+  gRawSigmaCutModAmpX->SetMarkerStyle(20);
+  gRawSigmaCutModAmpX->SetMarkerColor(kGreen+2);
+
+  //gCorSigmaCutModAmpX->Draw("*");
+  //gCorSigmaCutModAmpX->SetMarkerStyle(23);
+  //gCorSigmaCutModAmpX->SetMarkerColor(kCyan-3);
+
+  //gRawSigmaModAmpXOneGaus->Draw("*");
+  //gRawSigmaModAmpXOneGaus->SetMarkerStyle(21);
+  //gRawSigmaModAmpXOneGaus->SetMarkerColor(kRed);
+
+  gRawSigmaCutModAmpXOneGaus->Draw("*");
+  gRawSigmaCutModAmpXOneGaus->SetMarkerStyle(21);
+  gRawSigmaCutModAmpXOneGaus->SetMarkerColor(kCyan-3);
+
+  TLegend *leg = new TLegend(0.15,0.88,0.55,0.68);
+  leg->SetBorderSize(1);
+  //leg->AddEntry(gRawSigmaModAmpX,"Timing Resolution: Two Gaussian Fit","p");
+  //leg->AddEntry(gRawSigmaModAmpXOneGaus,"Timing Resolution: One Gaussian Fit","p");
+  leg->AddEntry(gRawSigmaCutModAmpX,"Timing Resolution Amp Cut: Two Gaussian Fit","p");
+  leg->AddEntry(gRawSigmaCutModAmpXOneGaus,"Timing Resolution Amp Cut: One Gaussian Fit","p");
+  leg->Draw();
+}

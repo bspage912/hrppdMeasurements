@@ -221,7 +221,7 @@ int main(int argc, char* argv[]) {
   const int _HRPPD_PULSE_WINDOW_ = 25;
   const int _HRPPD_BASELINE_WINDOW_OFFSET_ = 150;
   const int _HRPPD_BASELINE_WINDOW_WIDTH_ = 50;
-  const int _HRPPD_EDGE_SEARCH_LIMIT_ = 50;
+  const int _HRPPD_EDGE_SEARCH_LIMIT_ = 150; // 50
 
   // Loop Over Events and Find Offset
   cout << "Do Calibration Pass" << endl;
