@@ -1,7 +1,7 @@
 // Define Waveform Object and Functions
 
-#ifndef WAVE_FORM_H
-#define WAVE_FORM_H
+#ifndef WAVE_FORM_UTIL_H
+#define WAVE_FORM_UTIL_H
 
 #include <string>
 
