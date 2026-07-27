@@ -1,0 +1,24 @@
+{
+    "setup": {
+        "_comment":        "Run-specific oscilloscope channel mapping and trigger configuration",
+        "trigger_channel": "CH1",
+        "trigger_type":    "NIM",
+        "channel_branches": ["CH2", "CH2", "CH2", "CH2", "CH2"]
+    },
+    "trigger": {
+        "_comment":                       "Trigger pulse analysis parameters",
+        "threshold":                      -0.2,
+        "pulse_window":                   100,
+        "baseline_window_offset_up":      450,
+        "baseline_window_offset_down":    700,
+        "baseline_window_width":          150,
+        "edge_search_limit":              800
+    },
+    "hrppd": {
+        "_comment":                       "HRPPD signal channel analysis parameters",
+        "pulse_window":                   25,
+        "baseline_window_offset":         150,
+        "baseline_window_width":          50,
+        "edge_search_limit":              150
+    }
+}

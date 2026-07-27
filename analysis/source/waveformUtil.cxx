@@ -1,6 +1,6 @@
 //
 
-#include <waveform.h>
+#include <waveformUtil.h>
 
 int waveform::findMinimum(unsigned from, unsigned to)
 {
@@ -65,7 +65,7 @@ int waveform::getTrailingEdgeIndex(unsigned start, double threshold, unsigned li
   for(unsigned i=start; i<start+limit; i++)
     {
       if(mVal[i] > threshold)
-	return i;
+        return i;
     }
 
   return -1;
@@ -98,3 +98,4 @@ double waveform::fitLeadingEdge(unsigned from, unsigned to, double amp, double b
 
   return ((base - wkpt*amp) - a)/b;
 } // fitLeadingEdge
+
